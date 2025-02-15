@@ -1,0 +1,124 @@
+/* Nord-inspired Theme */
+:root {
+    --bg-color: #2E3440;
+    --text-color: #D8DEE9;
+    --accent-color: #88C0D0;
+    --button-bg: #4C566A;
+    --button-hover: #5E81AC;
+    --input-bg: #3B4252;
+    --input-border: #434C5E;
+    --icon-color: #ECEFF4;
+}
+
+.light-mode {
+    --bg-color: #ECEFF4;
+    --text-color: #2E3440;
+    --accent-color: #5E81AC;
+    --button-bg: #D8DEE9;
+    --button-hover: #A3BE8C;
+    --input-bg: #E5E9F0;
+    --input-border: #D8DEE9;
+    --icon-color: #2E3440;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+h1, h2 {
+    font-weight: 600;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+}
+
+button {
+    background-color: var(--button-bg);
+    color: var(--text-color);
+    border: none;
+    padding: 12px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: var(--button-hover);
+}
+
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.nav-buttons a {
+    text-decoration: none;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background-color: var(--button-bg);
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.3s;
+}
+
+.nav-buttons a:hover {
+    background-color: var(--button-hover);
+}
+
+input {
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    padding: 12px;
+    border-radius: 10px;
+    width: 100%;
+    color: var(--text-color);
+    margin-bottom: 12px;
+    display: block;
+}
+
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 14px;
+    border: 1px solid var(--input-border);
+}
+
+th {
+    background-color: var(--button-bg);
+}
+
+.theme-toggle {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: var(--icon-color);
+    transition: color 0.3s;
+}
+
+.theme-toggle:hover {
+    color: var(--button-hover);
+}
