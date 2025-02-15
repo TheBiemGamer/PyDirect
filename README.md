@@ -1,4 +1,4 @@
-<img src="pydirect/static/PyDirect.png" width="50%"/>
+<img src="pydirect/static/PyDirect.png"/>
 
 # PyDirect
 
