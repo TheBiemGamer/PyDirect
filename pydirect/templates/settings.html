@@ -8,38 +8,77 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='styles.css') }}"
     />
+    <script
+      src="https://kit.fontawesome.com/fc6fb202c6.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
-  <body>
-    <h1>Admin Settings</h1>
+  <body class="{{ 'dark-mode' if current_user.dark_mode else '' }}">
+    <div class="container">
+      <nav class="navbar">
+        <h1>Admin Settings</h1>
+        <div class="nav-actions">
+          <button
+            type="button"
+            class="btn btn-primary"
+            onclick="window.location.href='{{ url_for('admin') }}'"
+          >
+            <i class="fas fa-arrow-left"></i> Back to Admin Panel
+          </button>
+        </div>
+      </nav>
 
-    {% with messages = get_flashed_messages(with_categories=true) %} {% if
-    messages %} {% for category, message in messages %}
-    <div class="{{ category }}">{{ message }}</div>
-    {% endfor %} {% endif %} {% endwith %}
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">
+        <i class="fas fa-info-circle"></i> {{ message }}
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
 
-    <form method="POST">
-      <label for="username">New Username:</label>
-      <input
-        type="text"
-        id="username"
-        name="username"
-        placeholder="Enter new username"
-        required
-      />
-
-      <label for="password">New Password:</label>
-      <input
-        type="password"
-        id="password"
-        name="password"
-        placeholder="Enter new password"
-        required
-      />
-
-      <button type="submit">Update Credentials</button>
-    </form>
-
-    <br />
-    <a href="{{ url_for('admin') }}">Back to Admin Panel</a>
+      <div class="card">
+        <h2 class="mb-4">Update Credentials</h2>
+        <form method="POST">
+          <div class="form-group">
+            <label class="form-label" for="username">
+              New Username (leave blank to keep current):
+            </label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              class="form-control"
+              placeholder="Enter new username"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="password">
+              New Password (leave blank to keep current):
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="form-control"
+              placeholder="Enter new password"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="dark_mode">Dark Mode:</label>
+            <input
+              type="checkbox"
+              id="dark_mode"
+              name="dark_mode"
+              {%
+              if
+              current_user.dark_mode
+              %}checked{%
+              endif
+              %}
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Update Settings</button>
+        </form>
+      </div>
+    </div>
   </body>
 </html>

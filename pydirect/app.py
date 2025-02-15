@@ -18,6 +18,7 @@ from flask_login import (
     current_user,
 )
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "your_secret_key"
@@ -35,6 +36,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
+    dark_mode = db.Column(db.Boolean, default=False)  # Dark mode preference
 
 
 class Redirects(db.Model):
@@ -87,6 +89,7 @@ def admin():
                 db.session.add(new_redirect)
                 db.session.commit()
                 flash("Redirect added successfully!", "success")
+        return redirect(url_for("admin"))
     redirects = Redirects.query.all()
     return render_template("admin.html", redirects=redirects)
 
@@ -106,15 +109,39 @@ def delete_redirect(id):
 @login_required
 def settings():
     if request.method == "POST":
-        new_username = request.form["username"]
-        new_password = request.form["password"]
-        if new_username and new_password:
-            user = User.query.get(current_user.id)
+        new_username = request.form.get("username")
+        new_password = request.form.get("password")
+        dark_mode = True if request.form.get("dark_mode") == "on" else False
+
+        user = User.query.get(current_user.id)
+        updated = False
+
+        if new_username:
             user.username = new_username
+            updated = True
+
+        if new_password:
             user.password = generate_password_hash(new_password, method="pbkdf2:sha256")
+            updated = True
+
+        user.dark_mode = dark_mode
+
+        if updated:
             db.session.commit()
-            flash("Admin credentials updated successfully!", "success")
+            flash("Settings updated successfully!", "success")
+        else:
+            flash("Please provide a new username or password.", "danger")
+
     return render_template("settings.html")
+
+
+@app.route("/toggle_dark_mode", methods=["POST"])
+@login_required
+def toggle_dark_mode():
+    user = User.query.get(current_user.id)
+    user.dark_mode = not user.dark_mode
+    db.session.commit()
+    return jsonify(success=True, dark_mode=user.dark_mode)
 
 
 @app.route("/<path:source>")
@@ -125,15 +152,18 @@ def dynamic_redirect(source):
     return "Redirect not found", 404
 
 
-if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-        admin_user = User.query.first()
-        if not admin_user:
-            admin = User(
+with app.app_context():
+    db.create_all()
+    if not User.query.first():
+        try:
+            default_user = User(
                 username="admin",
                 password=generate_password_hash("admin", method="pbkdf2:sha256"),
             )
-            db.session.add(admin)
+            db.session.add(default_user)
             db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+
+if __name__ == "__main__":
     app.run(debug=True)
