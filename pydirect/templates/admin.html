@@ -89,9 +89,18 @@
           <tbody>
             {% for redirect in redirects %}
             <tr>
-              <td>{{ redirect.source }}</td>
+              <td>
+                <a
+                  href="{{ redirect.source.startswith('/') and redirect.source or '/' + redirect.source }}"
+                  target="_blank"
+                >
+                  {{ redirect.source }}
+                </a>
+              </td>
               <td class="text-truncate" style="max-width: 400px">
-                {{ redirect.destination }}
+                <a href="{{ redirect.destination }}" target="_blank">
+                  {{ redirect.destination }}
+                </a>
               </td>
               <td>
                 <div class="table-actions">

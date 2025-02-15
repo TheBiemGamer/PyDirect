@@ -25,6 +25,14 @@
     --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
 }
 
+a {
+    color: #0d6efd;
+}
+
+.dark-mode a {
+    color: #f8f9fa;
+}
+
 * {
     margin: 0;
     padding: 0;
