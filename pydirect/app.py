@@ -1,3 +1,5 @@
+import os
+import secrets
 from flask import (
     Flask,
     render_template,
@@ -5,7 +7,6 @@ from flask import (
     redirect,
     url_for,
     flash,
-    session,
     jsonify,
 )
 from flask_sqlalchemy import SQLAlchemy
@@ -21,7 +22,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "your_secret_key"
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", secrets.token_hex(32))
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -31,12 +32,11 @@ login_manager.login_view = "login"
 login_manager.login_message_category = "warning"
 
 
-# Database Models
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
-    dark_mode = db.Column(db.Boolean, default=False)  # Dark mode preference
+    dark_mode = db.Column(db.Boolean, default=False)
 
 
 class Redirects(db.Model):
