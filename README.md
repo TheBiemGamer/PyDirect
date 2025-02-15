@@ -1,3 +1,5 @@
+<img src="pydirect/static/PyDirect.png" width="50%"/>
+
 # PyDirect
 
 PyDirect is a Flask-based redirect management application. It allows you to create and manage URL redirects through an admin panel. The application supports user authentication, dark mode preference, and persistent settings.
